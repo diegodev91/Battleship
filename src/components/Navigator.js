@@ -3,20 +3,15 @@ import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 
-const Navigator = (props) => {
-  const { resetGame, screenMode } = props;
+export default function Navigator({ resetGame }) {
   return (
     <Navbar>
       <Navbar.Header>
         <Navbar.Brand>{<a href="/">{"Battleships React App"}</a>}</Navbar.Brand>
       </Navbar.Header>
-      {screenMode === "desktop" && (
-        <Nav pullRight>
-          <NavItem onClick={() => resetGame()}>Restart</NavItem>
-        </Nav>
-      )}
+      <Nav pullRight>
+        <NavItem onClick={() => resetGame()}>Restart</NavItem>
+      </Nav>
     </Navbar>
   );
-};
-
-export default Navigator;
+}

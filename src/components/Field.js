@@ -3,16 +3,12 @@ import { Col } from "react-bootstrap";
 import Cell from "./Cell";
 import Start from "./Start";
 
-const Field = (props) => {
-  let { field, hits, onCellClick, onClick, screenMode } = props;
+export default function Field(props) {
+  let { field, hits, onCellClick, onClick } = props;
   return (
     <Col lg={5} md={6} sm={12} xs={12} className="battleFieldPanel">
       {!field && (
-        <table
-          className={`emptyBattleField ${
-            screenMode === "tablet" && "centered"
-          }`}
-        >
+        <table className={`emptyBattleField centered`}>
           <tbody>
             <tr>
               <td className="emptyBattleField">
@@ -23,11 +19,7 @@ const Field = (props) => {
         </table>
       )}
       {field && hits < 17 && (
-        <table
-          className={`battlefieldTable ${
-            screenMode === "tablet" && "centered"
-          }`}
-        >
+        <table className={`battlefieldTable centered`}>
           <tbody>
             {field.map((row, x) => {
               return (
@@ -51,11 +43,7 @@ const Field = (props) => {
         </table>
       )}
       {hits === 17 && (
-        <table
-          className={`emptyBattleField ${
-            screenMode === "tablet" && "centered"
-          }`}
-        >
+        <table className={`emptyBattleField centered`}>
           <tbody>
             <tr>
               <td>
@@ -70,6 +58,4 @@ const Field = (props) => {
       )}
     </Col>
   );
-};
-
-export default Field;
+}

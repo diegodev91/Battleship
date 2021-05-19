@@ -9,21 +9,16 @@ import Navigator from "./Navigator";
 import Stats from "./Stats";
 import { shipTypes } from "../common/constants";
 import { getField, makeClone } from "../common/generateBaseData";
-import { getMaxHits } from "../common/getMaxHits";
 
 export default function App(props) {
   const [field, setField] = useState(null);
   const [flota, setFlota] = useState(null);
   const [shots, setShots] = useState(0);
   const [hits, setHits] = useState(0);
-  const [maxHits, setMaxHits] = useState(0);
-  const [screenMode, setScreenMode] = useState(null);
 
   useEffect(() => {
-    const maxHits = getMaxHits();
     let newflota = _.cloneDeep(shipTypes);
     setFlota(newflota);
-    setMaxHits(maxHits);
   }, []);
 
   const onClick = () => {
@@ -83,31 +78,17 @@ export default function App(props) {
 
   return (
     <div className="main-content">
-      <Navigator resetGame={() => resetGame()} screenMode={screenMode} />
+      <Navigator resetGame={() => resetGame()} />
       <Grid>
-        {screenMode === "desktop" ? (
-          <Row className="show-grid">
-            <Stats flota={flota} hits={hits} shots={shots} />
-            <Field
-              hits={hits}
-              field={field}
-              onClick={() => onClick()}
-              onCellClick={(x, y) => onCellClick(x, y)}
-              screenMode={screenMode}
-            />
-          </Row>
-        ) : (
-          <Row className="show-grid">
-            <Field
-              hits={hits}
-              field={field}
-              onClick={() => onClick()}
-              onCellClick={(x, y) => onCellClick(x, y)}
-              screenMode={screenMode}
-            />
-            <Stats flota={flota} hits={hits} shots={shots} />
-          </Row>
-        )}
+        <Row className="show-grid">
+          <Stats flota={flota} hits={hits} shots={shots} />
+          <Field
+            hits={hits}
+            field={field}
+            onClick={() => onClick()}
+            onCellClick={(x, y) => onCellClick(x, y)}
+          />
+        </Row>
       </Grid>
     </div>
   );

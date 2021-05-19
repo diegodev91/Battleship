@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap-theme.css";
 import "bootstrap/dist/css/bootstrap.css";
 import _ from "lodash";
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Row } from "react-bootstrap";
 import "../assets/css/App.css";
 import Field from "./Field.js";
@@ -11,54 +11,43 @@ import { shipTypes } from "../common/constants";
 import { getField, makeClone } from "../common/generateBaseData";
 import { getMaxHits } from "../common/getMaxHits";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      field: null,
-      flota: null,
-      shots: 0,
-      hits: 0,
-      maxHits: 0,
-      screenMode: null,
-    };
-  }
+export default function App(props) {
+  const [field, setField] = useState(null);
+  const [flota, setFlota] = useState(null);
+  const [shots, setShots] = useState(0);
+  const [hits, setHits] = useState(0);
+  const [maxHits, setMaxHits] = useState(0);
+  const [screenMode, setScreenMode] = useState(null);
 
-  UNSAFE_componentWillMount() {
+  useEffect(() => {
     const maxHits = getMaxHits();
     let newflota = _.cloneDeep(shipTypes);
-    this.setState({
-      flota: newflota,
-      maxHits: maxHits,
-    });
-  }
+    setFlota(newflota);
+    setMaxHits(maxHits);
+  }, []);
 
-  onClick() {
+  const onClick = () => {
     let newflota = _.cloneDeep(shipTypes);
-    this.setState({
-      field: getField(),
-      hits: 0,
-      shots: 0,
-      flota: newflota,
-    });
-  }
+    setField(getField());
+    setHits(0);
+    setShots(0);
+    setFlota(newflota);
+  };
 
-  resetGame() {
+  const resetGame = () => {
     let newflota = _.cloneDeep(shipTypes);
-    this.setState({
-      field: null,
-      hits: 0,
-      shots: 0,
-      flota: newflota,
-    });
-  }
+    setField(null);
+    setHits(0);
+    setShots(0);
+    setFlota(newflota);
+  };
 
-  onCellClick(x, y) {
-    let newField = makeClone(this.state.field);
-    let shot = this.state.shots + 1;
-    let hits = this.state.hits;
-    let newflota = [...this.state.flota];
-    let cellValue = this.state.field[x][y];
+  const onCellClick = (x, y) => {
+    let newField = makeClone(field);
+    let shot = shots + 1;
+    let hit = hits;
+    let newflota = [...flota];
+    let cellValue = field[x][y];
     if (cellValue >= 100) {
       switch (cellValue) {
         case 100:
@@ -80,54 +69,46 @@ class App extends Component {
           break;
       }
       newField[x][y] = "hitted";
-      hits += 1;
-      this.setState({
-        field: newField,
-        hits: hits,
-        shots: shot,
-        flota: newflota,
-      });
+      hit += 1;
+      setField(newField);
+      setHits(hit);
+      setShots(shots);
+      setFlota(newflota);
     } else {
       newField[x][y] = "miss";
-      this.setState({
-        field: newField,
-        shots: shot,
-      });
+      setField(newField);
+      setShots(shot);
     }
-  }
+  };
 
-  render() {
-    let { field, flota, hits, screenMode, shots } = this.state;
-    let statsPanel = <Stats flota={flota} hits={hits} shots={shots} />;
-    let battleFieldPanel = (
-      <Field
-        hits={hits}
-        field={field}
-        onClick={() => this.onClick()}
-        onCellClick={(x, y) => this.onCellClick(x, y)}
-        screenMode={screenMode}
-      />
-    );
-
-    return (
-      <div className="main-content">
-        <Navigator resetGame={() => this.resetGame()} screenMode={screenMode} />
-        <Grid>
-          {screenMode === "desktop" ? (
-            <Row className="show-grid">
-              {statsPanel}
-              {battleFieldPanel}
-            </Row>
-          ) : (
-            <Row className="show-grid">
-              {battleFieldPanel}
-              {statsPanel}
-            </Row>
-          )}
-        </Grid>
-      </div>
-    );
-  }
+  return (
+    <div className="main-content">
+      <Navigator resetGame={() => resetGame()} screenMode={screenMode} />
+      <Grid>
+        {screenMode === "desktop" ? (
+          <Row className="show-grid">
+            <Stats flota={flota} hits={hits} shots={shots} />
+            <Field
+              hits={hits}
+              field={field}
+              onClick={() => onClick()}
+              onCellClick={(x, y) => onCellClick(x, y)}
+              screenMode={screenMode}
+            />
+          </Row>
+        ) : (
+          <Row className="show-grid">
+            <Field
+              hits={hits}
+              field={field}
+              onClick={() => onClick()}
+              onCellClick={(x, y) => onCellClick(x, y)}
+              screenMode={screenMode}
+            />
+            <Stats flota={flota} hits={hits} shots={shots} />
+          </Row>
+        )}
+      </Grid>
+    </div>
+  );
 }
-
-export default App;

@@ -11,16 +11,17 @@ class Flota extends Component {
     let { flota } = this.props;
     return (
       <ul className="flotaContainer">
-        {flota.map((ship, index) => {
-          return (
-            <li key={index} className="shipItem">
-              <Hitpoints
-                hitPoints={ship.hitPoints - ship.hits}
-                hits={ship.hits}
-              />
-            </li>
-          );
-        })}
+        {flota &&
+          flota.map((ship, index) => {
+            return (
+              <li key={index} className="shipItem">
+                <Hitpoints
+                  hitPoints={ship.hitPoints - ship.hits}
+                  hits={ship.hits}
+                />
+              </li>
+            );
+          })}
       </ul>
     );
   }

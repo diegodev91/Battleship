@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./components/App";
+import Field from "./components/field";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<Field size={10} />, document.getElementById("root"));

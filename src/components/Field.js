@@ -1,61 +1,94 @@
-import React from "react";
-import { Col } from "react-bootstrap";
-import Cell from "./Cell";
-import Start from "./Start";
+import React, { useState, useEffect } from "react";
+import Board from "./board";
+import GameInfo from "./gameInfo";
+import GameOver from "./gameOver";
+import GameUtil from "../common/GameUtil";
 
-export default function Field(props) {
-  let { field, hits, onCellClick, onClick } = props;
+export default function Field({ size }) {
+  const [board, setBoard] = useState();
+  const [ships, setShips] = useState();
+  const [shipBlocksRevealed, setShipBlocksRevealed] = useState();
+  const [totalShipBlocks, setTotalShipBlocks] = useState();
+  const [totalShootCount, setTotalShootCount] = useState();
+  const [gameOver, setGameOver] = useState();
+
+  useEffect(() => {
+    gameInitialize();
+  }, []);
+
+  const gameInitialize = () => {
+    const gameUtil = new GameUtil(size);
+    const gameBoard = gameUtil.GenerateBoard();
+    setBoard(gameBoard);
+    setShips(gameUtil.ships);
+    setShipBlocksRevealed(0);
+    setTotalShipBlocks(gameUtil.totalShipBlocks);
+    setTotalShootCount(0);
+    setGameOver(false);
+  };
+
+  const handleCellClick = (cell) => {
+    if (cell.isSelected) {
+      return;
+    }
+
+    let selectedItem = { ...cell };
+    selectedItem.isSelected = true;
+
+    let _board = [...board];
+    _board[cell.coordinates.x][cell.coordinates.y] = selectedItem;
+
+    let _totalShootCount = totalShootCount;
+    _totalShootCount += 1;
+
+    let _shipBlocksRevealed = shipBlocksRevealed;
+    let _ships = ships;
+
+    if (selectedItem.isShip) {
+      _shipBlocksRevealed += 1;
+
+      for (let ship of _ships) {
+        let isBreak = false;
+        for (let shipCell of ship.points) {
+          if (
+            shipCell.x === cell.coordinates.x &&
+            shipCell.y === cell.coordinates.y
+          ) {
+            shipCell.isRevealed = true;
+            isBreak = true;
+            break;
+          }
+        }
+        if (isBreak) {
+          break;
+        }
+      }
+    }
+
+    setShips(_ships);
+    setBoard(_board);
+    setShipBlocksRevealed(_shipBlocksRevealed);
+    setTotalShootCount(_totalShootCount);
+
+    if (shipBlocksRevealed === totalShipBlocks) {
+      setGameOver(true);
+    }
+  };
+
+  const handlePlayAgain = () => {
+    gameInitialize();
+  };
+
   return (
-    <Col lg={5} md={6} sm={12} xs={12} className="battleFieldPanel">
-      {!field && (
-        <table className={`emptyBattleField centered`}>
-          <tbody>
-            <tr>
-              <td className="emptyBattleField">
-                <Start onClick={() => onClick()} />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      )}
-      {field && hits < 17 && (
-        <table className={`battlefieldTable centered`}>
-          <tbody>
-            {field.map((row, x) => {
-              return (
-                <tr key={x}>
-                  {row.map((column, y) => {
-                    return (
-                      <td key={y} className="tableCell">
-                        <Cell
-                          onCellClick={() => onCellClick(x, y)}
-                          x={x}
-                          y={y}
-                          cellState={column}
-                        />
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      )}
-      {hits === 17 && (
-        <table className={`emptyBattleField centered`}>
-          <tbody>
-            <tr>
-              <td>
-                <div className="text-center">
-                  <h1>Game over</h1>
-                  <Start onClick={() => onClick()} />
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      )}
-    </Col>
+    <div className="game">
+      <div className="heading">
+        <h1>Battleship</h1>
+      </div>
+      <div className="game-board">
+        <Board board={board} onCellClick={(cell) => handleCellClick(cell)} />
+      </div>
+      <GameInfo ships={ships} />
+      {gameOver && <GameOver onPlayAgain={() => handlePlayAgain()} />}
+    </div>
   );
 }

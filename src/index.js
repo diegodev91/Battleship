@@ -1,5 +1,13 @@
+import { BrowserRouter } from "react-router-dom";
+
 import React from "react";
 import ReactDOM from "react-dom";
-import Game from "./components/game";
+import Game from "./components/game/game";
+import * as constants from "./common/constants.js";
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+ReactDOM.render(
+  <BrowserRouter>
+    <Game />
+  </BrowserRouter>,
+  document.getElementById("root")
+);

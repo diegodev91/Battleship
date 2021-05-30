@@ -1,5 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Field from "./components/field";
+import Game from "./components/game";
 
-ReactDOM.render(<Field size={10} />, document.getElementById("root"));
+ReactDOM.render(<Game />, document.getElementById("root"));

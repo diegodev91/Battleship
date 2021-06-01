@@ -1,0 +1,7 @@
+.form-container {
+  padding-top: 50px;
+  width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}

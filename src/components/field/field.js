@@ -181,8 +181,8 @@ export default function Field() {
               color={"primary"}
               isDisabled={
                 cell.type === "columnHeader" ||
-                cell.type == "rowHeader" ||
-                cell.type == "index"
+                cell.type === "rowHeader" ||
+                cell.type === "index"
                   ? true
                   : false
               }

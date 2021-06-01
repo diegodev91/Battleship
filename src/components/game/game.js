@@ -5,7 +5,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import SettingsIcon from "@material-ui/icons/Settings";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
 import AssessmentIcon from "@material-ui/icons/Assessment";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Settings from "../settings/settings";
 import ScoreBoard from "../score-board/score-board";
 import Field from "../field/field";

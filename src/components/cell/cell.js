@@ -7,6 +7,7 @@ export default function Cell({
   isDisabled = true,
   isShipPiece = false,
   pieceId = "",
+  textValue = "",
 }) {
   const button = useRef(null);
 
@@ -22,6 +23,8 @@ export default function Cell({
       disabled={isDisabled}
       onClick={handleButtonClick}
       ref={button}
-    ></Button>
+    >
+      <strong>{textValue}</strong>
+    </Button>
   );
 }

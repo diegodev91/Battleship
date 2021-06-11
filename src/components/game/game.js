@@ -16,6 +16,7 @@ export default function Game() {
 
   return (
     <React.Fragment>
+      <h1>BattleShip App!</h1>
       <BottomNavigation
         value={"/"}
         onChange={(event, newValue) => {

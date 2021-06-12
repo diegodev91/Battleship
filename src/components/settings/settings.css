@@ -5,3 +5,7 @@
   flex-wrap: wrap;
   margin: 0 auto;
 }
+
+.input-container {
+  display: inline;
+}

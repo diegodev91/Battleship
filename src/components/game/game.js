@@ -16,7 +16,7 @@ export default function Game() {
   const history = useHistory();
 
   const getRouteFromIndex = (index) => {
-    return index == 0 ? "/" : index == 1 ? "game" : "score-board";
+    return index === 0 ? "/" : index === 1 ? "game" : "score-board";
   };
 
   return (

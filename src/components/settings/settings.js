@@ -9,11 +9,15 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import "./settings.css";
 
-export default function Settings() {
+export default function Settings({ handleSetTurns }) {
   const [level, setlevel] = useState("");
+  const [turns, setTurns] = useState(0);
 
-  const handleChange = (event) => {
+  const handleChangeLevel = (event) => {
     setlevel(event.target.value);
+    setTurns(
+      getTurns(event.target.value !== "custom" ? event.target.value : 0)
+    );
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -22,6 +26,33 @@ export default function Settings() {
       minWidth: "500px",
     },
   }));
+
+  const handlePlay = () => {
+    console.log(level);
+    console.log(turns);
+  };
+
+  const getTurns = (level) => {
+    let value = 0;
+    switch (level) {
+      case "easy":
+        value = Infinity;
+        break;
+      case "medium":
+        value = 100;
+        break;
+      case "hard":
+        value = 50;
+        break;
+      case "custom":
+        value = 0;
+        break;
+      default:
+        value = 0;
+    }
+
+    return value;
+  };
 
   return (
     <div className="form-container">
@@ -32,26 +63,32 @@ export default function Settings() {
             labelId="label-level"
             id="select-level"
             value={level}
-            onChange={handleChange}
+            onChange={handleChangeLevel}
           >
             <MenuItem value={"easy"}>Easy</MenuItem>
             <MenuItem value={"medium"}>Medium</MenuItem>
             <MenuItem value={"hard"}>Hard</MenuItem>
+            <MenuItem value={"custom"}>Custom</MenuItem>
           </Select>
         </FormControl>
         <FormControl className={useStyles().formControl} variant="filled">
           <TextField
             id="turns"
-            type="number"
+            type="text"
             label="Turns number"
             variant="filled"
+            disabled={level !== "custom"}
+            value={turns}
+            onChange={(event) => setTurns(event.target.value)}
           />
         </FormControl>
+
         <FormControl className={useStyles().formControl}>
           <Button
             variant="contained"
             color="primary"
             endIcon={<PlayArrowIcon />}
+            onClick={handlePlay}
           >
             Start
           </Button>
